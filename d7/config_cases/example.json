@@ -1,0 +1,68 @@
+{
+    "$schema": "../schema.json",
+    "script_load": {
+        "name": "pre set some functions",
+        "type": "SCRIPT_LOAD",
+        "continue_when_failed": false,
+        "config": {
+            "script": "def add(a, b):\n  return a + b"
+        }
+    },
+    "param_set": {
+        "name": "pre set some params",
+        "type": "PARAM_SET",
+        "continue_when_failed": false,
+        "config": {
+            "token": "xxxxxxx",
+            "sum": "${add(1, 2)}"
+        }
+    },
+    "http": {
+        "type": "HTTP",
+        "name": "test step http",
+        "continue_when_failed": false,
+        "config": {
+            "url": "http://httpbin.org/get",
+            "method": "GET",
+            "params": {
+                "a": "A",
+                "b": "B"
+            },
+            "headers": {
+                "h1": "H1",
+                "h2": "H2"
+            },
+            "use_err_code": "",
+            "extract_result_to": "resp"
+        }
+    },
+    "loop": {
+        "name": "test loop",
+        "type": "LOOP",
+        "continue_when_failed": false,
+        "config": {
+            "loop_from": "${range(3)}",
+            "children": [
+                {
+                    "type": "HTTP",
+                    "name": "test step http",
+                    "continue_when_failed": false,
+                    "config": {
+                        "url": "http://httpbin.org/get",
+                        "method": "GET",
+                        "params": {
+                            "a": "A",
+                            "b": "B"
+                        },
+                        "headers": {
+                            "h1": "H1",
+                            "h2": "H2"
+                        },
+                        "use_err_code": "",
+                        "extract_result_to": "resp"
+                    }
+                }
+            ]
+        }
+    }
+}

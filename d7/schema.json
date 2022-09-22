@@ -1,0 +1,563 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "datamaker task config schema",
+    "type": "object",
+    "properties": {
+        "http": {
+            "$ref": "#/definitions/step_HTTP"
+        },
+        "sql_insert": {
+            "$ref": "#/definitions/step_SQL_INSERT"
+        },
+        "sql_delete": {
+            "$ref": "#/definitions/step_SQL_DELETE"
+        },
+        "sql_update": {
+            "$ref": "#/definitions/step_SQL_UPDATE"
+        },
+        "sql_select": {
+            "$ref": "#/definitions/step_SQL_SELECT"
+        },
+        "redis_get": {
+            "$ref": "#/definitions/step_REDIS_GET"
+        },
+        "redis_set": {
+            "$ref": "#/definitions/step_REDIS_SET"
+        },
+        "redis_delete": {
+            "$ref": "#/definitions/step_REDIS_DELETE"
+        },
+        "script_load": {
+            "$ref": "#/definitions/step_SCRIPT_LOAD"
+        },
+        "param_set": {
+            "$ref": "#/definitions/step_PARAM_SET"
+        },
+        "loop": {
+            "$ref": "#/definitions/step_LOOP"
+        }
+    },
+    "definitions": {
+        "types": {
+            "enum": [
+                "SCRIPT_LOAD",
+                "PARAM_SET",
+                "SQL_UPDATE",
+                "SQL_DELETE",
+                "SQL_INSERT",
+                "SQL_SELECT",
+                "REDIS_GET",
+                "REDIS_SET",
+                "REDIS_DELETE",
+                "HTTP",
+                "LOOP"
+            ]
+        },
+        "step_HTTP": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "HTTP"
+                    ],
+                    "default": "HTTP"
+                },
+                "continue_when_failed": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "config": {
+                    "type": "object",
+                    "properties": {
+                        "url": {
+                            "type": "string",
+                            "pattern": "http[s]://.*"
+                        },
+                        "method": {
+                            "enum": [
+                                "GET",
+                                "POST"
+                            ]
+                        },
+                        "headers": {
+                            "type": "object"
+                        },
+                        "cookies": {
+                            "type": "object"
+                        },
+                        "params": {
+                            "type": "object"
+                        },
+                        "data": {
+                            "type": "object"
+                        },
+                        "use_err_code": {
+                            "type": "string",
+                            "default": "err_code"
+                        },
+                        "extract_result_to": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "url",
+                        "method",
+                        "use_err_code"
+                    ]
+                }
+            },
+            "required": [
+                "name",
+                "type",
+                "config"
+            ]
+        },
+        "step_SQL_INSERT": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "SQL_INSERT"
+                    ],
+                    "default": "SQL_INSERT"
+                },
+                "continue_when_failed": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "config": {
+                    "type": "object",
+                    "properties": {
+                        "meta_id": {
+                            "type": "string"
+                        },
+                        "table": {
+                            "type": "string"
+                        },
+                        "insert_fields": {
+                            "type": "object"
+                        },
+                        "extract_result_to": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "meta_id",
+                        "table",
+                        "insert_fields"
+                    ]
+                }
+            },
+            "required": [
+                "name",
+                "type",
+                "config"
+            ]
+        },
+        "step_SQL_DELETE": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "SQL_DELETE"
+                    ],
+                    "default": "SQL_DELETE"
+                },
+                "continue_when_failed": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "config": {
+                    "type": "object",
+                    "properties": {
+                        "meta_id": {
+                            "type": "string"
+                        },
+                        "table": {
+                            "type": "string"
+                        },
+                        "where": {
+                            "type": "string"
+                        },
+                        "where_args": {
+                            "type": "object"
+                        },
+                        "limit": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    "required": [
+                        "meta_id",
+                        "table",
+                        "where",
+                        "where_args",
+                        "limit"
+                    ]
+                }
+            },
+            "required": [
+                "name",
+                "type",
+                "config"
+            ]
+        },
+        "step_SQL_UPDATE": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "SQL_UPDATE"
+                    ],
+                    "default": "SQL_UPDATE"
+                },
+                "continue_when_failed": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "config": {
+                    "type": "object",
+                    "properties": {
+                        "meta_id": {
+                            "type": "string"
+                        },
+                        "table": {
+                            "type": "string"
+                        },
+                        "update_fields": {
+                            "type": "object"
+                        },
+                        "where": {
+                            "type": "string"
+                        },
+                        "where_args": {
+                            "type": "object"
+                        },
+                        "limit": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    "required": [
+                        "meta_id",
+                        "table",
+                        "update_fields",
+                        "where",
+                        "where_args",
+                        "limit"
+                    ]
+                }
+            },
+            "required": [
+                "name",
+                "type",
+                "config"
+            ]
+        },
+        "step_SQL_SELECT": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "SQL_SELECT"
+                    ],
+                    "default": "SQL_SELECT"
+                },
+                "continue_when_failed": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "config": {
+                    "$id": "step_SQL_SELECT",
+                    "type": "object",
+                    "properties": {
+                        "meta_id": {
+                            "type": "string"
+                        },
+                        "table": {
+                            "type": "string"
+                        },
+                        "where": {
+                            "type": "string"
+                        },
+                        "where_args": {
+                            "type": "object"
+                        },
+                        "limit": {
+                            "type": "integer",
+                            "minimum": 1
+                        },
+                        "extract_result_to": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "meta_id",
+                        "table",
+                        "where",
+                        "where_args",
+                        "limit",
+                        "extract_result_to"
+                    ]
+                }
+            },
+            "required": [
+                "name",
+                "type",
+                "config"
+            ]
+        },
+        "step_REDIS_GET": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "REDIS_GET"
+                    ],
+                    "default": "REDIS_GET"
+                },
+                "continue_when_failed": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "config": {
+                    "type": "object",
+                    "properties": {
+                        "meta_id": {
+                            "type": "string"
+                        },
+                        "key": {
+                            "type": "string"
+                        },
+                        "extract_result_to": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "meta_id",
+                        "key",
+                        "extract_result_to"
+                    ]
+                }
+            },
+            "required": [
+                "name",
+                "type",
+                "config"
+            ]
+        },
+        "step_REDIS_SET": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "REDIS_SET"
+                    ],
+                    "default": "REDIS_SET"
+                },
+                "continue_when_failed": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "config": {
+                    "type": "object",
+                    "properties": {
+                        "meta_id": {
+                            "type": "string"
+                        },
+                        "key": {
+                            "type": "string"
+                        },
+                        "value": {
+                            "type": "string"
+                        },
+                        "expire_seconds": {
+                            "type": "integer"
+                        }
+                    },
+                    "required": [
+                        "meta_id",
+                        "key",
+                        "value",
+                        "expire_seconds"
+                    ]
+                }
+            },
+            "required": [
+                "name",
+                "type",
+                "config"
+            ]
+        },
+        "step_REDIS_DELETE": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "REDIS_DELETE"
+                    ],
+                    "default": "REDIS_DELETE"
+                },
+                "continue_when_failed": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "config": {
+                    "$id": "step_REDIS_DELETE",
+                    "type": "object",
+                    "properties": {
+                        "meta_id": {
+                            "type": "string"
+                        },
+                        "key": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "meta_id",
+                        "key"
+                    ]
+                }
+            },
+            "required": [
+                "name",
+                "type",
+                "config"
+            ]
+        },
+        "step_SCRIPT_LOAD": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "SCRIPT_LOAD"
+                    ],
+                    "default": "SCRIPT_LOAD"
+                },
+                "continue_when_failed": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "config": {
+                    "$id": "step_SCRIPT_LOAD",
+                    "type": "object",
+                    "properties": {
+                        "script": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "script"
+                    ]
+                }
+            },
+            "required": [
+                "name",
+                "type",
+                "config"
+            ]
+        },
+        "step_PARAM_SET": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "PARAM_SET"
+                    ],
+                    "default": "PARAM_SET"
+                },
+                "continue_when_failed": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "config": {
+                    "type": "object"
+                }
+            },
+            "required": [
+                "name",
+                "type",
+                "config"
+            ]
+        },
+        "step_LOOP": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "LOOP"
+                    ],
+                    "default": "LOOP"
+                },
+                "continue_when_failed": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "config": {
+                    "type": "object",
+                    "properties": {
+                        "loop_from": {
+                            "type": "string"
+                        },
+                        "children": {
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {
+                                "type": "object"
+                            }
+                        }
+                    }
+                }
+            },
+            "required": [
+                "name",
+                "type",
+                "config"
+            ]
+        }
+    }
+}

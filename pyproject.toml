@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "d7"
+version = "0.1.0"
+description = "一个简单的造数工具，通过配置驱动，实现HTTP、mysql、redis、mq、内部RPC等调用，用来辅助开发与测试。"
+authors = ["readyou <791100944@qq.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pydantic = "^1.10.2"
+requests = "^2.28.1"
+redis = "^4.3.4"
+PyYAML = "^6.0"
+PyMySQL = "^1.0.2"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
